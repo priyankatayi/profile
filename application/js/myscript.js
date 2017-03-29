@@ -1,11 +1,11 @@
 $(function () {
     "use strict";
-    var topoffset = 70; //variable for menu height
+    var topOffset = 70; //variable for menu height
 
     //Scrollspy Plugin
     $('body').scrollspy({
         target: 'header .navbar',
-        offset: topoffset
+        offset: topOffset
     });
 
     //For smooth scrolling when clicking on navigation
@@ -17,7 +17,7 @@ $(function () {
             target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
             if (target.length) {
                 $('html,body').animate({
-                    scrollTop: target.offset().top - topoffset + 2
+                    scrollTop: target.offset().top - topOffset + 2
                 }, 500);
                 return false;
             }
@@ -29,25 +29,25 @@ $(function () {
     });
 
     //Making a api call to Instagram API to get images from my account and displaying them in a sleideshow using carousel
-    var token = '1728856332.17ee967.4222bba75963437d88157adda965812a',
-        userid = 1728856332,//My instagram userId
+    var token = '1728856332.17ee967.4222bba75963437d88157adda965812a', //Token is obtained by registering the application in Instagram and then used the provided Client ID for generating the access token.
+        userId = 1728856332,//My instagram userId
         num_photos = 10,
         images = ["card", "ornaments", "tree", "wall-hanging", "quotes", "post-box", "drawing", "door-quote", "giraffe", "wood-block"];
 
     //Making an Ajx call to fetch data from instagram
     $.ajax({
-        url: 'https://api.instagram.com/v1/users/' + userid + '/media/recent',
+        url: 'https://api.instagram.com/v1/users/' + userId + '/media/recent',
         dataType: 'jsonp',
         type: 'GET',
         scope: "public_content",
         data: {access_token: token, count: num_photos},
-        success: function (data) {
-            for (var x in data.data) {
-                $('#myCarousel .item').eq(x).append('<img src="' + data.data[x].images.standard_resolution.url + '" alt="' + images[x] + '">');
+        success: function (dataFromInstagram) {
+            for (var x in dataFromInstagram.data) {
+                $('#myCarousel .item').eq(x).append('<img src="' + dataFromInstagram.data[x].images.standard_resolution.url + '" alt="' + images[x] + '">');
             }
         },
-        error: function (data) {
-            console.log(data); // if the call fails, error message is displayed
+        error: function (error) {
+            alert(error); // if the call fails, error message is displayed
         }
     });
 
@@ -78,6 +78,7 @@ $(function () {
         votes += 1;
         $(this).data('votes', votes);
         $(this).next().text("Votes: " + votes);
+        //Increasing the progress bar by 1% when the count of votes add to 10
         if (votes % 10 == 0) {
             var barSize = $(this).prev().find(".progressBar").data('barSize');
             barSize += 1;
@@ -95,22 +96,20 @@ $(function () {
             barSizeHtml: $("#buttonHtml").prev().find(".progressBar").data('barSize')
         };
 
-        // Pushing a skills object to the database using these values
+        // Pushing a count object to the database using these values
         skills.push(count);
     });
 
     //For submitting the details of user into database
     $("#myForm").submit(function () {
         // input values from each of the form elements
-        var name = $("#firstName").val();
-        var email = $("#email").val();
-        var message = $("#comment").val();
-        // Pushing the contact object to the database using form values
-        contact.push({
-            "name": name,
-            "email": email,
-            "message": message
-        });
+        var info = {
+            name: $("#firstName").val(),
+            email: $("#email").val(),
+            message: $("#comment").val()
+        }
+        // Pushing the info object to the database using form values
+        contact.push(info);
     });
 });
 var config = {
