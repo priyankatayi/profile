@@ -250,6 +250,13 @@ padding-left:150px
         height:6px;
 
     }
+    .progress{
+        /*margin-top: 10px;*/
+        background-color: darkgrey;
+        width:50% !important;
+        height:5px;
+
+    }
 }
 
 @media (max-width: 992px) {
@@ -294,8 +301,9 @@ input{
 .progress{
     margin-top: 20px;
     background-color: darkgrey;
-    width:450px;
-    height:22px;
+    width:55%;
+    height:10%;
+   margin-left: 30px;
     padding-top: 0;
 }
 .portfolio{
@@ -303,11 +311,11 @@ input{
 }
 
 .thumbnail img{
-    height:270px;
+    height:80%;
     width:100%;
 }
 .thumbnail iframe{
-    height:180px;
+    height:80%;
     width:100%;
 }
 /*Endorse my skills*/
@@ -333,7 +341,6 @@ input{
     background-color: transparent;
     border:0;
 }
-
 
 /*Interests*/
 .carousel-inner .item img {

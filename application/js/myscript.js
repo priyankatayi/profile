@@ -70,6 +70,7 @@ $(function () {
         interval: 4000
     });
 
+
     //For increasing the progress bar and no of votes based on likes
     $('button[id^=button]').data('votes', 0);
     $('button[id^=button]').prev().find(".progressBar").data('barSize', 0);
