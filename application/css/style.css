@@ -345,8 +345,8 @@ input{
 
 /*Interests*/
 .carousel-inner .item img {
-    width: 60%;
-    height:40%;
+    /*width: 60%;*/
+    /*height:40%;*/
     margin: 0 auto;/* Align slide image horizontally center */
     background-color: transparent;
 }
@@ -364,4 +364,8 @@ blockquote{
     border-left:0;
     font-weight: 400;
 }
+.carousel-inner > .item > img {
+     width: 380px;
+     height: 360px;
+ }
 
