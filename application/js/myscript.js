@@ -29,21 +29,31 @@ $(function () {
     });
 
     //Making a api call to Instagram API to get images from my account and displaying them in a sleideshow using carousel
-    var token = '1728856332.17ee967.4222bba75963437d88157adda965812a', //Token is obtained by registering the application in Instagram and then used the provided Client ID for generating the access token.
-        userId = 1728856332,//My instagram userId
-        num_photos = 10,
-        images = ["card", "ornaments", "tree", "wall-hanging", "quotes", "post-box", "drawing", "door-quote", "giraffe", "wood-block"];
-
+    var token = 'IGQVJYUUpQMU84RlFWVThVaHQ1ajVzRFVCcHQ3RFlyckpseW9MbTlycncybm1tQWtpRkx1RjRVdEhtTW12LVRWTVlPX3BsWjFlZAHlHVU9yZAVd2U3VuMHdvdHVHZAW9zRFFhcWhkWlVB'; //Token is obtained by registering the application in Instagram and then used the provided Client ID for generating the access token.
+    
     //Making an Ajx call to fetch data from instagram
     $.ajax({
-        url: 'https://api.instagram.com/v1/users/' + userId + '/media/recent',
+        url: 'https://graph.instagram.com/17841400729987013/media',
         dataType: 'jsonp',
         type: 'GET',
         scope: "public_content",
-        data: {access_token: token, count: num_photos},
+        data: {access_token: token, fields: 'id'},
         success: function (dataFromInstagram) {
-            for (var x in dataFromInstagram.data) {
-                $('#myCarousel .item').eq(x).append('<img src="' + dataFromInstagram.data[x].images.standard_resolution.url + '" alt="' + images[x] + '">');
+            var imagesData = dataFromInstagram.data;
+            for(var i=0;i<imagesData.length;i++) {
+                $.ajax({
+                    url: 'https://graph.instagram.com/' + imagesData[i].id,
+                    dataType: 'jsonp',
+                    type: 'GET',
+                    scope: "public_content",
+                    data: {access_token: token, fields: 'media_url'},
+                    success: function (dataFromInstagram) {
+                        $('#myCarousel .carousel-inner').append('<div class="item"><img src="' + dataFromInstagram.media_url + '" alt=""></div>');                   
+                    },
+                    error: function (error) {
+                      alert(error); // if the call fails, error message is displayed
+                    }
+                });
             }
         },
         error: function (error) {
@@ -51,18 +61,23 @@ $(function () {
         }
     });
 
+
     //To generate carousel indicators and random image on load
-    var countSlide = $('#myCarousel .item').length;
-    var randomSlide = Math.floor(Math.random() * countSlide);
-    $('#myCarousel .item').eq(randomSlide).addClass('active');
-    for (var i = countSlide; i > 0; i--) {
-        var insertText = '<li data-target="#myCarousel" data-slide-to="' + i + '"';
-        if (i === randomSlide) {
-            insertText += ' class="active" ';
+    
+
+    $(window).load(function() {
+        var countSlide = $('#myCarousel .item').length;
+        var randomSlide = Math.floor(Math.random() * countSlide);
+        $('#myCarousel .item').eq(randomSlide).addClass('active');
+        for (var i = countSlide; i > 0; i--) {
+            var insertText = '<li data-target="#myCarousel" data-slide-to="' + i + '"';
+            if (i === randomSlide) {
+                insertText += ' class="active" ';
+            }
+            insertText += '></li>';
+            $('#myCarousel ol').append(insertText);
         }
-        insertText += '></li>';
-        $('#myCarousel ol').append(insertText);
-    }
+      });
 
     //For setting the time interval of slideshow
     $('#myCarousel').carousel({
